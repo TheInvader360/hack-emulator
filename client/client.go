@@ -46,6 +46,9 @@ func (c *Client) Run() {
 			if window.Pressed(pixelgl.KeyR) {
 				(*c.VM).Reset()
 			}
+			if window.Pressed(pixelgl.KeyT) {
+				(*c.VM).Tick()
+			}
 		}
 		c.handleInput(window)
 		c.handleOutput(window, canvas)

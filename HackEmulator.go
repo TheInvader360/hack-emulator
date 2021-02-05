@@ -3,13 +3,13 @@ package main
 import (
 	"bufio"
 	"flag"
-	"fmt"
 	"log"
 	"os"
+	"strconv"
 
 	"github.com/TheInvader360/hack-emulator/client"
 	"github.com/TheInvader360/hack-emulator/hack"
-	"github.com/TheInvader360/hack-emulator/hack/stub"
+	"github.com/TheInvader360/hack-emulator/hack/impl"
 
 	"github.com/faiface/pixel/pixelgl"
 )
@@ -23,7 +23,7 @@ var (
 func main() {
 	flag.StringVar(&path, "path", "./roms/Fill.hack", "path to rom file")
 	flag.Parse()
-	vm = &stub.Hack{}
+	vm = impl.NewHack()
 	loadRom()
 	c = client.Client{VM: &vm}
 	pixelgl.Run(c.Run)
@@ -36,12 +36,17 @@ func loadRom() {
 	}
 	defer file.Close()
 
+	data := []uint16{}
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
-		fmt.Println(scanner.Text()) //TODO load binary string into vm instruction memory
+		word, err := strconv.ParseUint(scanner.Text(), 2, 16)
+		if err != nil {
+			log.Fatal(err)
+		}
+		data = append(data, uint16(word))
 	}
-
 	if err := scanner.Err(); err != nil {
 		log.Fatal(err)
 	}
+	vm.LoadRom(data)
 }
