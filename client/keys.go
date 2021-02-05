@@ -1,0 +1,71 @@
+package client
+
+import "github.com/faiface/pixel/pixelgl"
+
+// Keys - keyboard key code map
+var Keys = map[int]pixelgl.Button{
+	32: pixelgl.KeySpace,
+
+	48: pixelgl.Key0,
+	49: pixelgl.Key1,
+	50: pixelgl.Key2,
+	51: pixelgl.Key3,
+	52: pixelgl.Key4,
+	53: pixelgl.Key5,
+	54: pixelgl.Key6,
+	55: pixelgl.Key7,
+	56: pixelgl.Key8,
+	57: pixelgl.Key9,
+
+	65: pixelgl.KeyA,
+	66: pixelgl.KeyB,
+	67: pixelgl.KeyC,
+	68: pixelgl.KeyD,
+	69: pixelgl.KeyE,
+	70: pixelgl.KeyF,
+	71: pixelgl.KeyG,
+	72: pixelgl.KeyH,
+	73: pixelgl.KeyI,
+	74: pixelgl.KeyJ,
+	75: pixelgl.KeyK,
+	76: pixelgl.KeyL,
+	77: pixelgl.KeyM,
+	78: pixelgl.KeyN,
+	79: pixelgl.KeyO,
+	80: pixelgl.KeyP,
+	81: pixelgl.KeyQ,
+	82: pixelgl.KeyR,
+	83: pixelgl.KeyS,
+	84: pixelgl.KeyT,
+	85: pixelgl.KeyU,
+	86: pixelgl.KeyV,
+	87: pixelgl.KeyW,
+	88: pixelgl.KeyX,
+	89: pixelgl.KeyY,
+	90: pixelgl.KeyZ,
+
+	128: pixelgl.KeyEnter,
+	129: pixelgl.KeyBackspace,
+
+	130: pixelgl.KeyLeft,
+	131: pixelgl.KeyUp,
+	132: pixelgl.KeyRight,
+	133: pixelgl.KeyDown,
+
+	138: pixelgl.KeyInsert,
+	139: pixelgl.KeyDelete,
+	140: pixelgl.KeyEscape,
+
+	141: pixelgl.KeyF1,
+	142: pixelgl.KeyF2,
+	143: pixelgl.KeyF3,
+	144: pixelgl.KeyF4,
+	145: pixelgl.KeyF5,
+	146: pixelgl.KeyF6,
+	147: pixelgl.KeyF7,
+	148: pixelgl.KeyF8,
+	149: pixelgl.KeyF9,
+	150: pixelgl.KeyF10,
+	151: pixelgl.KeyF11,
+	152: pixelgl.KeyF12,
+}

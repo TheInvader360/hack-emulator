@@ -4,7 +4,7 @@ An emulator for the Hack platform (nand2tetris)
 
 A work in progress - it doesn't do much yet!
 
-### Usage
+## Usage
 
 ```bash
 git clone https://github.com/TheInvader360/hack-emulator
@@ -17,7 +17,7 @@ Then:
 go run HackEmulator.go -path=./roms/Fill.hack
 ```
 
-### Commands
+## Commands
 
 ```bash
 Ctrl+R = Reset
