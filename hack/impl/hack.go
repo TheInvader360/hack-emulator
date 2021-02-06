@@ -1,6 +1,9 @@
 package impl
 
-import "fmt"
+import (
+	"fmt"
+	"os"
+)
 
 // Hack - Struct representing the hack computer architecture
 type Hack struct {
@@ -17,7 +20,7 @@ func NewHack() *Hack {
 	h.rom = make([]uint16, 32768, 32768)
 	h.ram = make([]uint16, 24577, 24577)
 
-	// Temp data (stripey screen)
+	// TODO - Remove (temp)
 	for i, _ := range h.ram {
 		if i%2 == 0 || i%3 == 0 {
 			h.ram[i] = 0b0000000000000000
@@ -32,13 +35,11 @@ func NewHack() *Hack {
 // LoadRom - Loads a program into the instruction memory
 func (h *Hack) LoadRom(data []uint16) {
 	copy(h.rom[:], data)
-	fmt.Println(h.rom)
 }
 
 // SetKeyboard - Loads a key code into the keyboard register
 func (h *Hack) SetKeyboard(data uint16) {
 	h.ram[24576] = data
-	fmt.Println(fmt.Sprintf("KEY=%d | PC=%d", h.ram[24576], h.pc))
 }
 
 // GetScreen - Returns the screen memory map data
@@ -48,11 +49,42 @@ func (h *Hack) GetScreen() []uint16 {
 
 // Tick - Simulates one CPU cycle
 func (h *Hack) Tick() {
-	//TODO
+	h.handleInstruction()
 	h.pc++
+
+	// TODO - Remove (temp)
+	if h.pc > 40 {
+		os.Exit(0)
+	}
 }
 
 // Reset - Resets the program counter
 func (h *Hack) Reset() {
 	h.pc = 0
+}
+
+func (h *Hack) handleInstruction() {
+	inst := h.rom[h.pc]
+	fmt.Printf("A=%5d | D=%5d | PC=%2d | KEY=%3d | %016b | ", h.aRegister, h.dRegister, h.pc, h.ram[24576], inst)
+	if (inst>>15)&0b1 == 0 {
+		h.aRegister = inst
+		fmt.Print("A |\n")
+	} else {
+		//  111accccccdddjjj
+		// c   acccccc
+		// d          ddd
+		// j             jjj
+		c := (inst >> 6) & 0b1111111
+		d := (inst >> 3) & 0b111
+		j := inst & 0b111
+		fmt.Print("C | ")
+		fmt.Printf("c=%07b ", c)
+		fmt.Printf("d=%03b ", d)
+		fmt.Printf("j=%03b\n", j)
+		h.executeComputeInstruction(c, d, j)
+	}
+}
+
+func (h *Hack) executeComputeInstruction(c, d, j uint16) {
+	// TODO - Implement...
 }
