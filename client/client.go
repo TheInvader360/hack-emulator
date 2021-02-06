@@ -26,7 +26,7 @@ type Client struct {
 func (c *Client) Run() {
 	cfg := pixelgl.WindowConfig{
 		Bounds: pixel.R(0, 0, gfxW, gfxH),
-		VSync:  true,
+		//VSync:  true,
 	}
 
 	window, err := pixelgl.NewWindow(cfg)
@@ -46,10 +46,8 @@ func (c *Client) Run() {
 			if window.Pressed(pixelgl.KeyR) {
 				(*c.VM).Reset()
 			}
-			if window.Pressed(pixelgl.KeyT) {
-				(*c.VM).Tick()
-			}
 		}
+		(*c.VM).Tick()
 		c.handleInput(window)
 		c.handleOutput(window, canvas)
 		dt := time.Since(lastFrame).Seconds()
@@ -74,9 +72,13 @@ func (c *Client) handleOutput(window *pixelgl.Window, canvas *pixelgl.Canvas) {
 	pixels := []uint8{}
 	for _, word := range (*c.VM).GetScreen() {
 		for i := 15; i >= 0; i-- {
-			pixels = append(pixels, uint8(word>>i)&1*255)
-			pixels = append(pixels, uint8(word>>i)&1*255)
-			pixels = append(pixels, uint8(word>>i)&1*255)
+			pixelRGB := uint8(255) // white
+			if (word>>i)&0b1 == 1 {
+				pixelRGB = uint8(0) // black
+			}
+			pixels = append(pixels, pixelRGB)
+			pixels = append(pixels, pixelRGB)
+			pixels = append(pixels, pixelRGB)
 			pixels = append(pixels, 255)
 		}
 	}

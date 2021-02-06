@@ -4,6 +4,8 @@ An emulator for the Hack platform (nand2tetris)
 
 A work in progress - it doesn't do much yet!
 
+Fill.hack: Hold down "R" key, then tap "Ctrl" - screen will *slowly* fill up with black pixels...
+
 ## Usage
 
 ```bash
