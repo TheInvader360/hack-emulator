@@ -26,7 +26,7 @@ type Client struct {
 func (c *Client) Run() {
 	cfg := pixelgl.WindowConfig{
 		Bounds: pixel.R(0, 0, gfxW, gfxH),
-		//VSync:  true,
+		VSync:  true,
 	}
 
 	window, err := pixelgl.NewWindow(cfg)
@@ -47,7 +47,6 @@ func (c *Client) Run() {
 				(*c.VM).Reset()
 			}
 		}
-		(*c.VM).Tick()
 		c.handleInput(window)
 		c.handleOutput(window, canvas)
 		dt := time.Since(lastFrame).Seconds()

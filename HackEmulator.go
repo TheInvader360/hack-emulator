@@ -6,10 +6,11 @@ import (
 	"log"
 	"os"
 	"strconv"
+	"time"
 
 	"github.com/TheInvader360/hack-emulator/client"
 	"github.com/TheInvader360/hack-emulator/hack"
-	"github.com/TheInvader360/hack-emulator/hack/stub"
+	"github.com/TheInvader360/hack-emulator/hack/impl"
 
 	"github.com/faiface/pixel/pixelgl"
 )
@@ -23,9 +24,10 @@ var (
 func main() {
 	flag.StringVar(&path, "path", "./roms/Fill.hack", "path to rom file")
 	flag.Parse()
-	vm = stub.NewHack()
+	vm = impl.NewHack()
 	loadRom()
 	c = client.Client{VM: &vm}
+	go vmLoop()
 	pixelgl.Run(c.Run)
 }
 
@@ -49,4 +51,11 @@ func loadRom() {
 		log.Fatal(err)
 	}
 	vm.LoadRom(data)
+}
+
+func vmLoop() {
+	for {
+		time.Sleep(10 * time.Nanosecond)
+		vm.Tick()
+	}
 }

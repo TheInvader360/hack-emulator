@@ -2,10 +2,6 @@
 
 An emulator for the Hack platform (nand2tetris)
 
-A work in progress - it doesn't do much yet!
-
-Fill.hack: Hold down "R" key, then tap "Ctrl" - screen will *slowly* fill up with black pixels...
-
 ## Usage
 
 ```bash
@@ -18,6 +14,8 @@ Then:
 ```bash
 go run HackEmulator.go -path=./roms/Fill.hack
 ```
+
+Fill.hack: Hold any key to fill the screen with black pixels, release to clear the screen.
 
 ## Commands
 
