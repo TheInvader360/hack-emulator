@@ -84,6 +84,6 @@ func (c *Client) handleOutput(window *pixelgl.Window, canvas *pixelgl.Canvas) {
 	}
 	canvas.Clear(color.White)
 	canvas.SetPixels(pixels)
-	canvas.Draw(window, pixel.IM.Moved(pixel.V(gfxW/2, gfxH/2)))
+	canvas.Draw(window, pixel.IM.Moved(pixel.V(gfxW/2, gfxH/2)).ScaledXY(pixel.V(gfxW/2, gfxH/2), pixel.V(1, -1)))
 	window.Update()
 }

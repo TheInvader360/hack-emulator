@@ -9,7 +9,7 @@ import (
 
 	"github.com/TheInvader360/hack-emulator/client"
 	"github.com/TheInvader360/hack-emulator/hack"
-	"github.com/TheInvader360/hack-emulator/hack/impl"
+	"github.com/TheInvader360/hack-emulator/hack/stub"
 
 	"github.com/faiface/pixel/pixelgl"
 )
@@ -23,7 +23,7 @@ var (
 func main() {
 	flag.StringVar(&path, "path", "./roms/Fill.hack", "path to rom file")
 	flag.Parse()
-	vm = impl.NewHack()
+	vm = stub.NewHack()
 	loadRom()
 	c = client.Client{VM: &vm}
 	pixelgl.Run(c.Run)
