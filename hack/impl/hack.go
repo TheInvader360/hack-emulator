@@ -7,21 +7,17 @@ import (
 // Hack - Struct representing the hack computer architecture
 type Hack struct {
 	rom       []uint16 // Instruction Memory: 32k ROM (0-32767)
-	ram       []uint16 // Data Memory: 16k RAM (0-16383), 8k screen map (16384-24575), 16 bit keyboard register (24576)
-	aRegister uint16   // 16 bit A register
-	dRegister uint16   // 16 bit D register
-	pc        uint16   // 16 bit Program Counter
+	ram       []int16  // Data Memory: 16k RAM (0-16383), 8k screen map (16384-24575), 16 bit keyboard register (24576)
+	aRegister int16    // 16 bit A register
+	dRegister int16    // 16 bit D register
+	pc        int16    // 16 bit Program Counter
 }
 
 // NewHack - Constructor
 func NewHack() *Hack {
 	h := Hack{}
 	h.rom = make([]uint16, 32768, 32768)
-	h.ram = make([]uint16, 24577, 24577)
-	// TODO - Remove (temp screen data)
-	for i := range h.ram[16384:24576] {
-		h.ram[i] = 0b1000000010000000
-	}
+	h.ram = make([]int16, 24577, 24577)
 	return &h
 }
 
@@ -31,19 +27,19 @@ func (h *Hack) LoadRom(data []uint16) {
 }
 
 // SetKeyboard - Loads a key code into the keyboard register
-func (h *Hack) SetKeyboard(data uint16) {
+func (h *Hack) SetKeyboard(data int16) {
 	h.ram[24576] = data
 }
 
 // GetScreen - Returns the screen memory map data
-func (h *Hack) GetScreen() []uint16 {
+func (h *Hack) GetScreen() []int16 {
 	return h.ram[16384:24576]
 }
 
 // Tick - Simulates one CPU cycle
 func (h *Hack) Tick() {
-	inst := h.rom[h.pc]
-	fmt.Printf("A=%5d | D=%5d | PC=%2d | KEY=%3d | %016b | ", h.aRegister, h.dRegister, h.pc, h.ram[24576], inst)
+	inst := int16(h.rom[h.pc])
+	fmt.Printf("A=%5d | D=%5d | PC=%2d | KEY=%3d | %016b | ", h.aRegister, h.dRegister, h.pc, h.ram[24576], h.rom[h.pc])
 	h.pc++
 	if (inst>>15)&0b1 == 0 {
 		// Execute A-Instruction (0vvvvvvvvvvvvvvv: aRegister=vvvvvvvvvvvvvvv)
@@ -83,17 +79,17 @@ func (h *Hack) Reset() {
 	h.pc = 0b0000000000000000
 }
 
-func (h *Hack) compute(comp uint16) (uint16, error) {
+func (h *Hack) compute(comp int16) (int16, error) {
 	switch comp {
 	case 0b0101010:
 		fmt.Print("comp(0)   ")
-		return 0b0000000000000000, nil
+		return 0, nil
 	case 0b0111111:
 		fmt.Print("comp(1)   ")
-		return 0b0000000000000001, nil
+		return 1, nil
 	case 0b0111010:
 		fmt.Print("comp(-1)  ")
-		return 0b1111111111111111, nil // -1 (two's complement)
+		return -1, nil
 	case 0b0001100:
 		fmt.Print("comp(D)   ")
 		return h.dRegister, nil
@@ -159,7 +155,7 @@ func (h *Hack) compute(comp uint16) (uint16, error) {
 		return h.dRegister + h.ram[h.aRegister], nil
 	case 0b1010011:
 		fmt.Print("comp(D-M) ")
-		return h.dRegister - h.ram[h.aRegister], nil //e.g. 0b1110000000000001 equates to decimal 57345 and -8191 (two's complement)
+		return h.dRegister - h.ram[h.aRegister], nil
 	case 0b1000111:
 		fmt.Print("comp(M-D) ")
 		return h.ram[h.aRegister] - h.dRegister, nil
@@ -175,8 +171,7 @@ func (h *Hack) compute(comp uint16) (uint16, error) {
 	}
 }
 
-func (h *Hack) handleJump(jump, computed uint16) {
-	// TODO - fix bug... problem with < 0... it seems 0b1111111111111111 (-1 in two's complement) is not less than 0...
+func (h *Hack) handleJump(jump, computed int16) {
 	switch jump {
 	case 0b000:
 		fmt.Print("jump(---)")

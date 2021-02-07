@@ -65,7 +65,7 @@ func (c *Client) handleInput(window *pixelgl.Window) {
 			break
 		}
 	}
-	(*c.VM).SetKeyboard(uint16(keyCode))
+	(*c.VM).SetKeyboard(int16(keyCode))
 }
 
 func (c *Client) handleOutput(window *pixelgl.Window, canvas *pixelgl.Canvas) {
